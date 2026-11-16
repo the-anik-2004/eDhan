@@ -39,53 +39,69 @@ export const useUserSync =() =>{
                     throw fetchError;
                 }
 
+                let currency: string | null;
                 if(existingUser){
-                    if (cancelled) return;
-                    setCurrency(existingUser.currency ?? "INR");
-                    setNeedsOnboarding(!existingUser.currency);
-                    return;
-                }
+                    currency = existingUser.currency;
+                } else {
+                    if (!email) {
+                        throw new Error("User has no email address");
+                    }
 
-                if (!email) {
-                    throw new Error("User has no email address");
-                }
+                    const {data: newUser,error:insertError}=
+                    await authSupabase
+                                    .from("users")
+                                    .upsert({
+                                        clerk_id:userId,
+                                        email,
+                                        name,
+                                        image_url:imageUrl,
+                                    })
+                                    .select("currency")
+                                    .single();
 
-                const {data: newUser,error:insertError}=
-                await authSupabase
-                                .from("users")
-                                .upsert({
-                                    clerk_id:userId,
-                                    email,
-                                    name,
-                                    image_url:imageUrl,
-                                })
-                                .select("currency")
-                                .single();
+                    if(insertError){
+                        throw insertError;
+                    }
 
-                if(insertError){
-                    throw insertError;
-                }
-
-                if (!newUser) {
-                    throw new Error("User upsert returned no user");
+                    if (!newUser) {
+                        throw new Error("User upsert returned no user");
+                    }
+                    currency = newUser.currency;
                 }
 
                 if (cancelled) return;
-                setCurrency(newUser?.currency??"INR");
-                setNeedsOnboarding(!newUser?.currency);
 
-                const {error: accountError}= await authSupabase
-                                                    .from('accounts')
-                                                    .insert({
-                                                        user_id:userId,
-                                                        name:'Cash',
-                                                        type:"CASH",
-                                                        balance: 0,
-                                                        is_default: true,
-                                                    });
-                if (accountError){
-                    console.error("Error creating default account",accountError); 
+                const {data: defaultAccount, error: accountFetchError} = await authSupabase
+                    .from("accounts")
+                    .select("id")
+                    .eq("user_id", userId)
+                    .eq("is_default", true)
+                    .limit(1)
+                    .maybeSingle();
+
+                if (accountFetchError) {
+                    throw accountFetchError;
                 }
+
+                if (!defaultAccount) {
+                    const {error: accountError} = await authSupabase
+                        .from("accounts")
+                        .insert({
+                            user_id: userId,
+                            name: "Cash",
+                            type: "CASH",
+                            balance: 0,
+                            is_default: true,
+                        });
+
+                    if (accountError) {
+                        throw accountError;
+                    }
+                }
+
+                if (cancelled) return;
+                setCurrency(currency ?? "INR");
+                setNeedsOnboarding(!currency);
             }catch(error){
                 console.error("Error syncing user:", error);
                 if (!cancelled) {
