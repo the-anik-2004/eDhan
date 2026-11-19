@@ -94,43 +94,6 @@ export function CurrencyPicker(
                     )}
                 />
 
-                {/* <FlatList
-                    data={filteredCurrencies}
-                    keyExtractor={(currency) => currency.code}
-                    keyboardShouldPersistTaps="handled"
-                    ListEmptyComponent={
-                        <Text className="px-5 py-6 text-center text-gray-500">
-                            No currencies found.
-                        </Text>
-                    }
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            accessibilityRole="button"
-                            onPress={() => {
-                                onSelect(item);
-                                handleClose();
-                            }}
-                            className="flex-row items-center border-b border-[#E8E6DF] px-5 py-4"
-                        >
-                            <Text className="w-12 text-base font-semibold text-[#1A1D26]">
-                                {item.symbol}
-                            </Text>
-                            <View className="flex-1">
-                                <Text className="text-base text-[#1A1D26]">
-                                    {item.name}
-                                </Text>
-                                <Text className="text-sm text-gray-500">
-                                    {item.code}
-                                </Text>
-                            </View>
-                            {item.code === selectedCode && (
-                                <Text className="text-sm font-semibold text-[#1D4E5B]">
-                                    Selected
-                                </Text>
-                            )}
-                        </TouchableOpacity>
-                    )}
-                /> */}
             </SafeAreaView>
         </Modal>
     )

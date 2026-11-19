@@ -115,7 +115,7 @@ export default function OnboardingScreen() {
 
   return (
     <SafeAreaView
-    className="flex-1 bg-red" edges={["top"]}
+    className="flex-1 bg-background" edges={["top"]}
     >
       <KeyboardAvoidingView
         behavior={Platform.OS==="ios"?"padding":"height"}

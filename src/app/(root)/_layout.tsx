@@ -23,7 +23,7 @@ export default function RootGroupLayout(){
 
     if (syncError && needsOnboarding === null) {
         return (
-            <View className="flex-1 items-center justify-center px-6">
+            <View className="flex-1 items-center justify-center px-6 bg-background">
                 <Text className="mb-4 text-center text-[#1A1D26]">{syncError}</Text>
                 <TouchableOpacity
                     accessibilityRole="button"
@@ -38,7 +38,7 @@ export default function RootGroupLayout(){
 
     if (!minLoadDone || needsOnboarding ===null){
         return (
-            <View className="flex-1 items-center justify-center">
+            <View className="flex-1 items-center justify-center bg-background">
                 <ActivityIndicator size="large" color="#1A1D26"/>
             </View>
         )
