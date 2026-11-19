@@ -121,7 +121,7 @@ export default function SignInScreen() {
 
   if (signIn.status === 'needs_second_factor' || signIn.status === 'needs_client_trust') {
     return (
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1 ">
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1 bg-background">
         <View className="flex-1 justify-center items-stretch px-6 -mt-16 ">
           <Image
             source={require('../../../assets/images/edl.png')}
@@ -182,7 +182,7 @@ export default function SignInScreen() {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1 bg-background">
       <View className="flex-1 justify-center items-stretch px-6 -mt-16">
         <Image
           source={require('../../../assets/images/edl.png')}

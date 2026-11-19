@@ -90,7 +90,7 @@ export default function SignUpScreen() {
       return(
           <KeyboardAvoidingView
             behavior={Platform.OS==="ios"?"padding":"height"}
-            className="flex-1 "
+            className="flex-1 bg-background"
           >
             <View 
               className="flex-1 justify-center items-stretch px-6 -mt-16 gap-2"
@@ -163,7 +163,7 @@ export default function SignUpScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS==="ios"?"padding":"height"}
-      className="flex-1 "
+      className="flex-1 bg-background"
     >
     <View 
       className="flex-1 justify-center items-stretch px-6 -mt-16"

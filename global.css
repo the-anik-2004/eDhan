@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes ai-pulse-ring {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.22);
+  }
+}
+
+.animate-ai-pulse-ring {
+  animation: ai-pulse-ring 1.4s ease-in-out infinite;
+}

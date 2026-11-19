@@ -20,7 +20,7 @@ export default function TabLayout() {
   if (useNativeTabs) {
     return (
       <NativeTabs
-        backgroundColor="#FFFFFF"
+        backgroundColor="#F8F7F2"
         tintColor="#4A9EFF"
         iconColor={{ default: '#5C5F68', selected: '#4A9EFF' }}
         labelStyle={{
@@ -69,7 +69,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#4A9EFF',
         tabBarInactiveTintColor: '#5C5F68',
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#F8F7F2',
           borderTopColor: '#E8E6DF',
           paddingTop: 4,
           height: 80,
