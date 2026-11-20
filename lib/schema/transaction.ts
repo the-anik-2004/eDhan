@@ -1,5 +1,5 @@
 import { z } from "zod";
-import {CategoryKey} from "../../constants/categories";
+import { CategoryKey } from "../../constants/categories";
 
 export const transactionSchema=z.object({
     type:z.enum(["EXPENSE","INCOME"]),
@@ -15,4 +15,4 @@ export const transactionSchema=z.object({
     date:z.date(),
 })
 
-export type transactionFormValues = z.infer<typeof transactionSchema>;
+export type TransactionFormValues = z.infer<typeof transactionSchema>;
