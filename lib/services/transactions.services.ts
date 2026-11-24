@@ -31,7 +31,7 @@ export type NewTransaction = {
     description:string | null;
     date:string;
     input_method:InputMethod;
-    voice_transcription?: string | null;
+    voice_transcript?: string | null;
 }
 
 export type TransactionFilters = {

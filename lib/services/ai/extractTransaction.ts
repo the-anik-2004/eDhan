@@ -1,8 +1,9 @@
-import { Nullable } from "@clerk/expo/types";
 import { CATEGORY_KEYS_EXPENSE, CATEGORY_KEYS_INCOME, CategoryKey } from "../../../constants/categories";
-import { nullable, properties, string } from "zod";
 
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent";
+const REQUEST_TIMEOUT_MS = 45_000;
+const MAX_TRANSIENT_RETRIES = 2;
+const RETRYABLE_STATUS_CODES = new Set([429, 500, 502, 503, 504]);
 
 export type ExtractedTransaction={
     type : "EXPENSE" |"INCOME"|null;
@@ -34,34 +35,51 @@ async function callGemini(promptText:string,inlineData:{mimeType:string,data:str
     const apiKey=process.env.EXPO_PUBLIC_GEMINI_API_KEY;
     if(!apiKey) throw new Error("Missing EXPO_PUBLIC_GEMINI_API_KEY");
 
-    const res = await fetch(`${GEMINI_URL}?key=${apiKey}`,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            contents:[
-                {
-                    role:"user",
-                    parts:[{text:promptText},{inlineData}],
-                },
-            ],
-            generationConfig:{
-                responseMimeType:"application/json",
-                responseSchema:"RESPONSE_SCHEMA"
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+        for (let attempt = 0; ; attempt++) {
+            const res = await fetch(`${GEMINI_URL}?key=${apiKey}`,{
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                signal:controller.signal,
+                body:JSON.stringify({
+                    contents:[
+                        {
+                            role:"user",
+                            parts:[{text:promptText},{inlineData}],
+                        },
+                    ],
+                    generationConfig:{
+                        responseMimeType:"application/json",
+                        responseSchema:RESPONSE_SCHEMA
+                    }
+                })
+            });
+
+            if(!res.ok){
+                const errText=await res.text();
+                if (RETRYABLE_STATUS_CODES.has(res.status) && attempt < MAX_TRANSIENT_RETRIES) {
+                    await new Promise(resolve => setTimeout(resolve, 1_000 * 2 ** attempt));
+                    continue;
+                }
+                throw new Error(`Gemini request failed: ${errText}`);
             }
-        })
 
-    });
+            const data=await res.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    if(!res.ok){
-        const errText=await res.text();
-        throw new Error(`Gemini request failed: ${errText}`);
+            if(!text) throw new Error("No response from gemini");
+            return JSON.parse(text) as ExtractedTransaction;
+        }
+    } catch (error) {
+        if(controller.signal.aborted){
+            throw new Error("Gemini request timed out after 45 seconds. Please try again.");
+        }
+        throw error;
+    } finally {
+        clearTimeout(timeoutId);
     }
-
-    const data=await res.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if(!text) throw new Error("No response from gemini");
-    return JSON.parse(text) as ExtractedTransaction;
 }
 
 export async function extractTransactionFromReceipt(base64Image:string,mimeType:string):Promise<ExtractedTransaction> {
