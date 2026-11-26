@@ -1,0 +1,4 @@
+# Keep gateway JWT verification enabled for this privileged scheduled function.
+# The handler also verifies a cron-only secret before it can send any email.
+[functions.weekly-tips]
+verify_jwt = true

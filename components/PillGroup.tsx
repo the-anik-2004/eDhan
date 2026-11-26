@@ -32,7 +32,7 @@ export function PillGroup<T extends string>({
           {option.icon && <Text className="text-xs">{option.icon}</Text>}
           <Text
             className={`text-xs ${
-              value === option.key ? "text-white" : "text-brand-text-secondary"
+              value === option.key ? "text-white" : "text-zinc-400"
             }`}
           >
             {option.label}

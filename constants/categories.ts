@@ -1,4 +1,16 @@
-export const CATEGORIES = {
+// Category data is kept under the Edge Function shared directory so the mobile
+// app and scheduled email use one canonical category definition.
+export {
+  CATEGORIES,
+  CATEGORY_KEYS_EXPENSE,
+  CATEGORY_KEYS_INCOME,
+  EXPENSE_CATEGORIES,
+  getCategoryConfig,
+  INCOME_CATEGORIES,
+} from "../supabase/functions/_shared/categories";
+export type { CategoryKey } from "../supabase/functions/_shared/categories";
+
+/*export const CATEGORIES = {
   // ── EXPENSE (15) ──────────────────────────────────────────
   food: {
     label: "Food & Dining",
@@ -148,3 +160,4 @@ export const getCategoryConfig = (key: CategoryKey) => CATEGORIES[key];
 // used in Gemini prompts - gives the model the full list of valid keys
 export const CATEGORY_KEYS_EXPENSE = EXPENSE_CATEGORIES.map((c) => c.key);
 export const CATEGORY_KEYS_INCOME = INCOME_CATEGORIES.map((c) => c.key);
+*/

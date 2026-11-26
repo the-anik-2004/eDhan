@@ -357,7 +357,7 @@ return (
                       placeholder="e.g. Swiggy order"
                       placeholderTextColor="#8A8D96"
                       className="bg-white border border-[#E8E6DF] rounded-xl
-                      px-4 py-3.5 mb-4 text-sm Otext-brand-bg"/>)}
+                      px-4 py-3.5 mb-4 text-sm Otext-black"/>)}
                     />
                     {error ? (
                       <Text className="text-red-400 text-xs mb-4">{error}</Text>
