@@ -51,7 +51,7 @@ export default function BudgetModal(
         title={budget?"Edit monthly budget" : "Set monthly budget"}
         onClose={onClose}
     >
-    <Text className="Otext-brand-bg text-xs font-medium mb-1.5">
+    <Text className="Otext-black text-xs font-medium mb-1.5">
         Monthly budget
     </Text>
 
@@ -65,7 +65,7 @@ export default function BudgetModal(
     placeholderTextColor={COLORS.placeholder}
     keyboardType="numeric"
     autoFocus
-    className=" rounded-xl bg-white border ltext-brand-bg border-[#E8E6DF] rounded-x1 px-4 py-3 mb-5 text-sm"
+    className=" rounded-xl bg-white border ltext-black border-[#E8E6DF] rounded-x1 px-4 py-3 mb-5 text-sm"
     />
     {error ? (
         <Text className="text-red-400 text-xs mb-3 ">{error}</Text>

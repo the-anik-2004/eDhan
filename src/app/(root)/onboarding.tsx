@@ -175,7 +175,7 @@ export default function OnboardingScreen() {
             onPress={()=>setPickerOpen(true)}
             className="flex-row items-center justify-between bg-white border border-[#E8E6DF] rounded-xl px-4 py-3.5 mb-6"
           >
-            <Text className="text-sm Otext-brand-bg">
+            <Text className="text-sm Otext-black">
               {selectedCurrency.symbol} {selectedCurrency.code} -{" "}
               {selectedCurrency.name}
               </Text>
